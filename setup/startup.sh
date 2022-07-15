@@ -63,6 +63,7 @@ if [ ! -d "$PREFIX" ]; then
   echo "mamba create"
   mamba env create -f "$ENVS"/"$NAME".yml -q
   # mamba env create -f "$HOME"/setup/"$NAME".yml -q
+
   mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
   # mamba run -n "$NAME" kernda --display-name "$NAME" -o --env-dir "$PREFIX" "$PREFIX"/share/jupyter/kernels/python3/kernel.json
   source ${GEO_FILE}/unavco.sh
@@ -83,6 +84,7 @@ JN_CONFIG=$HOME/.jupyter/jupyter_notebook_config.json
 
 # generate config file if it doesn't exist
 if [ ! -f "$HOME/.jupyter" ]; then
+  echo "Creating jupyter_notebook_config.json"
   mkdir -p "$HOME/.jupyter"
   touch "$JN_CONFIG"
 fi
@@ -110,3 +112,14 @@ cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py
 c.InteractiveShellApp.extensions = ['df_jupyter_magic']
 c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'
 EOT
+
+# DF_MAG="c.InteractiveShellApp.extensions = ['df_jupyter_magic']"
+# KRNL_MGR="c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'"
+
+# PY_CONFIG="$HOME"/.jupyter/jupyter_lab_config.py
+
+# grep -qxF "\"c.InteractiveShellApp.extensions = ['df_jupyter_magic']\"" "$PY_CONFIG" \
+# || echo "\"c.InteractiveShellApp.extensions = ['df_jupyter_magic']\"" >> "$PY_CONFIG"
+
+# grep -qxF "\"c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'\"" "$PY_CONFIG" \
+# || echo "\"c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'\"" >> "$PY_CONFIG"

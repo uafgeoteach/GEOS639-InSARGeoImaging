@@ -112,6 +112,7 @@ WORKDIR /home/jovyan
 COPY setup/startup.sh ${GEO_FILE}/startup.sh
 COPY setup/unavco.sh ${GEO_FILE}/unavco.sh
 
+RUN chown -R jovyan:users $HOME
 USER jovyan
 
 EXPOSE 8888
