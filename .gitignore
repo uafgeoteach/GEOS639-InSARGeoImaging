@@ -16,3 +16,11 @@ log
 !.local/envs/unavco.yml
 .viminfo
 .vscode
+
+# ######### Notebook specific items #######
+
+# Week 9
+Week-9/lab_6_data
+# Week 11
+Week-11/pycorr_iceflow
+Week-11/*.tif

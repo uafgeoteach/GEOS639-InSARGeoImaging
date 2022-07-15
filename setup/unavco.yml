@@ -43,10 +43,10 @@ dependencies:
   - zarr
   - pip:
     - df_jupyter_magic
-    # - git+https://github.com/pyrocko/kite
+    - git+https://github.com/pyrocko/kite
     - h5py<3
     - ipynb
-    - kite
+    # - kite
     - mintpy
     - okada_wrapper
     - url-widget

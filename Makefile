@@ -16,6 +16,7 @@ clean:
 			.config ARIA-tools-docs .bash_profile .viminfo \
 			.local/bin .local/lib .local/share .local/envs/.conda_envs_dir_test \
 			.local/envs/unavco \
-			Week-9/lab_6_data Week-9/.ipynb_checkpoints
+			Week-9/lab_6_data Week-9/.ipynb_checkpoints \
+			Week-11/.ipynb_checkpoints Week-11/pycorr_iceflow Week-11/*.tif
 
 restart: clean start

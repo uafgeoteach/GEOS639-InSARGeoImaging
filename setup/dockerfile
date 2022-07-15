@@ -96,16 +96,16 @@ RUN addgroup -gid 599 elevation \
     && echo '%elevation ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Clean up a few other things at the end
-RUN apt update && \
+RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
-    apt autoremove -y && \
+    apt-get autoremove -y && \
     conda clean --yes --all && \
     chmod -R 777 /opt/conda/pkgs
 
 RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
 
 WORKDIR /home/jovyan
-RUN conda init
+# RUN conda init
 
 # new addition - copy .sh into docker
 # COPY etc/pull.py ${GEO_FILE}/pull.py 
