@@ -1,0 +1,120 @@
+# FROM jupyter/base-notebook:hub-1.4.2 as release
+
+# originally working from this:
+# FROM jupyter/base-notebook@sha256:8635b39569cddecf2fac3d95ffe7777d007153e46d47a5dc873357d7cb2d5478
+
+# FROM jupyter/base-notebook@sha256:bc9ad73498f21ae716ba0e58d660063eae1677f6dd2bd5b669248fd0bf22dc79
+FROM jupyter/base-notebook:hub-2.3.1
+
+
+LABEL organization="Alaska Satellite Facility"
+LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
+LABEL creation_date="2022-06-13"
+
+# Base Stage ****************************************************************
+USER root
+# WORKDIR /
+
+RUN set -ve
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+        software-properties-common \
+        git && \
+    add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
+    apt-get update && \
+    apt-get upgrade -y
+
+# Install general items. If a library is needed for a specific piece of software, put it with that software.
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+        zip \
+        unzip \
+        wget \
+        vim \
+        rsync \
+        less \
+        snaphu \
+        curl \
+        openssh-client \
+        libgl1-mesa-glx \
+        emacs \
+        gnupg2 \
+        jq \
+        gfortran \
+        proj-bin \
+        geotiff-bin \
+        libshp-dev \
+        libshp2 \
+        libhdf5-dev \
+        libnetcdf-dev \
+        libgdal-dev \
+        libgsl-dev
+
+# Manually update nbconvert. A dicrepancy in the versioning causes a 500 when opening a notebook. https://github.com/jupyter/notebook/issues/3629#issuecomment-399408222
+# Remember, here pip is updating within the condas namespace where jupyter notebook items are held.
+RUN pip install --upgrade nbconvert
+
+# Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
+# RUN pip install tornado==5.1.1  # 4.5.3
+# RUN pip install tornado \ 
+# RUN pip install tornado==4.5.3 \
+RUN pip install tornado \ 
+    url-widget \
+    awscli
+
+# Install conda and mamba
+RUN conda install conda=4.13.0 && \
+    conda update -n base mamba
+
+# RUN pip install 'awscli==1.19.60' 'boto3==1.17.60' 'pyyaml==5.4.1' 'bokeh==2.3.1'
+
+# Install any other custom and jupyter libaries like widgets
+# Use pip (conda version) since we want to corner off GIAnT's work and also run it with Jupyter
+RUN mamba install -c conda-forge -y \
+    # jupyter_contrib_nbextensions=0.5.1 \
+    jupyter_contrib_nbextensions \
+    jupyter-resource-usage \
+    nb_conda_kernels \
+    jupyterlab \ 
+    ipympl \
+    mamba_gator
+
+# env - unavco
+ENV GEO_FILE /etc/unavco
+RUN mkdir $GEO_FILE && \
+    chmod -R 777 /etc/unavco/
+
+# Make sure that any files in the home directory are jovyan permission
+RUN chown -R jovyan:users $HOME/
+
+# Make sure mamba (within conda) has write access
+RUN chmod -R 755 /opt/conda/
+
+# # Add sudo group user 599 elevation
+RUN addgroup -gid 599 elevation \
+    && echo '%elevation ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Clean up a few other things at the end
+RUN apt update && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt autoremove -y && \
+    conda clean --yes --all && \
+    chmod -R 777 /opt/conda/pkgs
+
+RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
+
+WORKDIR /home/jovyan
+RUN conda init
+
+# new addition - copy .sh into docker
+# COPY etc/pull.py ${GEO_FILE}/pull.py 
+COPY setup/startup.sh ${GEO_FILE}/startup.sh
+COPY setup/unavco.sh ${GEO_FILE}/unavco.sh
+
+USER jovyan
+
+EXPOSE 8888
+
+ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser --allow-root
+# ENTRYPOINT jupyter lab --no-browser --allow-root
