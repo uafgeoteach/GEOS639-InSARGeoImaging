@@ -108,17 +108,8 @@ EOT
 fi
 
 python -m pip install df-jupyter-magic
-cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py
+if ! test -f "$HOME"/.ipython/profile_default/ipython_config.py; then
+cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
 c.InteractiveShellApp.extensions = ['df_jupyter_magic']
 EOT
-
-# DF_MAG="c.InteractiveShellApp.extensions = ['df_jupyter_magic']"
-# KRNL_MGR="c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'"
-
-# PY_CONFIG="$HOME"/.jupyter/jupyter_lab_config.py
-
-# grep -qxF "\"c.InteractiveShellApp.extensions = ['df_jupyter_magic']\"" "$PY_CONFIG" \
-# || echo "\"c.InteractiveShellApp.extensions = ['df_jupyter_magic']\"" >> "$PY_CONFIG"
-
-# grep -qxF "\"c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'\"" "$PY_CONFIG" \
-# || echo "\"c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'\"" >> "$PY_CONFIG"
+fi
