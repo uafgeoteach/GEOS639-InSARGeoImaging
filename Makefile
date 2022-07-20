@@ -19,4 +19,10 @@ clean:
 			Week-9/lab_6_data Week-9/.ipynb_checkpoints \
 			Week-11/.ipynb_checkpoints Week-11/pycorr_iceflow Week-11/*.tif
 
+# clean junk file in each course
+course-clean:
+	rm -rf Week-9/lab_6_data Week-9/.ipynb_checkpoints \
+		Week-11/.ipynb_checkpoints Week-11/pycorr_iceflow Week-11/*.tif \
+		Week-11/*.nc Week-11/lab_6_data
+
 restart: clean start
