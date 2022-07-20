@@ -5,8 +5,8 @@
 
 # FROM jupyter/base-notebook@sha256:bc9ad73498f21ae716ba0e58d660063eae1677f6dd2bd5b669248fd0bf22dc79
 
-FROM jupyter/base-notebook:latest
-
+# FROM jupyter/base-notebook:latest
+FROM jupyter/base-notebook:python-3.9.12 as release
 
 LABEL organization="Alaska Satellite Facility"
 LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
@@ -59,7 +59,7 @@ RUN pip install --upgrade nbconvert
 
 # Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
 # RUN pip install tornado==5.1.1  # 4.5.3
-RUN pip install tornado \ 
+RUN pip install tornado==5.1.1 \
     url-widget \
     awscli
 
@@ -73,7 +73,7 @@ RUN conda install conda=4.13.0 && \
 # Use pip (conda version) since we want to corner off GIAnT's work and also run it with Jupyter
 RUN mamba install -c conda-forge -y \
     # jupyter_contrib_nbextensions=0.5.1 \
-    jupyter_contrib_nbextensions \
+#     jupyter_contrib_nbextensions \
     jupyter-resource-usage \
     nb_conda_kernels \
     jupyterlab \ 
@@ -108,7 +108,7 @@ RUN apt-get update && \
 RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
 
 WORKDIR /home/jovyan
-# RUN conda init
+RUN conda init
 
 COPY setup/startup.sh ${GEO_FILE}/startup.sh
 COPY setup/unavco.sh ${GEO_FILE}/unavco.sh

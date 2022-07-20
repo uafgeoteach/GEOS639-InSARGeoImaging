@@ -11,7 +11,7 @@ log
 .ipynb_checkpoints
 .ipython
 .jupyter
-.local/*
+.local/**
 .local/envs/*
 !.local/envs/unavco.yml
 .viminfo

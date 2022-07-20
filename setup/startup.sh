@@ -110,7 +110,6 @@ fi
 python -m pip install df-jupyter-magic
 cat <<EOT >> "$HOME"/.ipython/profile_default/ipython_config.py
 c.InteractiveShellApp.extensions = ['df_jupyter_magic']
-c.NotebookApp.kernel_manager_class = 'notebook.services.kernels.kernelmanager.AsyncMappingKernelManager'
 EOT
 
 # DF_MAG="c.InteractiveShellApp.extensions = ['df_jupyter_magic']"

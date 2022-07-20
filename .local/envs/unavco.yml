@@ -33,7 +33,7 @@ dependencies:
   - pykdtree
   - pyproj
   - pyresample
-  - pyrocko
+  - pyrocko==2022.04.28
   - scikit-image
   - scipy
   - shapely
@@ -42,11 +42,9 @@ dependencies:
   - xarray
   - zarr
   - pip:
-    - df_jupyter_magic
     - git+https://github.com/pyrocko/kite
     - h5py<3
     - ipynb
-    # - kite
     - mintpy
     - okada_wrapper
     - url-widget
