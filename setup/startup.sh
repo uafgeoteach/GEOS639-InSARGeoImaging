@@ -108,7 +108,7 @@ EOT
 fi
 
 python -m pip install df-jupyter-magic
-if ! test -f "$HOME"/.ipython/profile_default/ipython_config.py; then
+if [ ! -f "$HOME/.ipython/profile_default/ipython_config.py" ]; then
 cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
 c.InteractiveShellApp.extensions = ['df_jupyter_magic']
 EOT

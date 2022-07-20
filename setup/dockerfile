@@ -6,7 +6,7 @@
 # FROM jupyter/base-notebook@sha256:bc9ad73498f21ae716ba0e58d660063eae1677f6dd2bd5b669248fd0bf22dc79
 
 # FROM jupyter/base-notebook:latest
-FROM jupyter/base-notebook:python-3.9.12 as release
+FROM jupyter/base-notebook:python-3.9.2 as release
 
 LABEL organization="Alaska Satellite Facility"
 LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
