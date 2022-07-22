@@ -20,7 +20,9 @@ log
 # ######### Notebook specific items #######
 
 # Week 9
-Week-9/lab_6_data
+Week-09/lab_6_data
 # Week 11
 Week-11/pycorr_iceflow
 Week-11/*.tif
+Week-11/*.nc
+Week-11/lab_6_data

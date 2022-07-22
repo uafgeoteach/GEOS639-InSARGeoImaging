@@ -86,8 +86,8 @@ RUN mkdir $GEO_FILE && \
     chown -R jovyan:users /etc/unavco/
     # chmod -R 777 /etc/unavco/
 
-# Make sure that any files in the home directory are jovyan permission
-RUN chown -R jovyan:users $HOME/
+# # Make sure that any files in the home directory are jovyan permission
+# RUN chown -R jovyan:users $HOME/
 
 # Make sure mamba (within conda) has write access
 RUN chown -R jovyan:users /opt/conda/
@@ -107,7 +107,7 @@ RUN apt-get update && \
 
 RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
 
-WORKDIR /home/jovyan
+# WORKDIR /home/jovyan
 RUN conda init
 
 COPY setup/startup.sh ${GEO_FILE}/startup.sh
@@ -117,8 +117,11 @@ RUN chown -R jovyan:users $HOME
 USER jovyan
 
 EXPOSE 8888
-WORKDIR /home/jovyan
+# WORKDIR /home/jovyan
 USER jovyan
 
-ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser --allow-root
+# --generate-config will generate .jupyter/jupyter_notebook_config.py
+ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser \
+    --allow-root  
+    # --generate-config
 # ENTRYPOINT jupyter lab --no-browser --allow-root

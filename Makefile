@@ -16,12 +16,12 @@ clean:
 			.config ARIA-tools-docs .bash_profile .viminfo \
 			.local/bin .local/lib .local/share .local/envs/.conda_envs_dir_test \
 			.local/envs/unavco \
-			Week-9/lab_6_data Week-9/.ipynb_checkpoints \
+			Week-09/lab_6_data Week-09/.ipynb_checkpoints \
 			Week-11/.ipynb_checkpoints Week-11/pycorr_iceflow Week-11/*.tif
 
 # clean junk file in each course
 course-clean:
-	rm -rf Week-9/lab_6_data Week-9/.ipynb_checkpoints \
+	rm -rf Week-09/lab_6_data Week-09/.ipynb_checkpoints \
 		Week-11/.ipynb_checkpoints Week-11/pycorr_iceflow Week-11/*.tif \
 		Week-11/*.nc Week-11/lab_6_data
 

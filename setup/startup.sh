@@ -108,8 +108,33 @@ EOT
 fi
 
 python -m pip install df-jupyter-magic
-if [ ! -f "$HOME/.ipython/profile_default/ipython_config.py" ]; then
-cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
+
+
+# DF="c.InteractiveShellApp.extensions = ['df_jupyter_magic']"
+# KRNL="c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']"
+# LAB_CONFIG='.jupyter/jupyter_lab_config.py'
+# grep -qF -- "$DF" "$LAB_CONFIG" || echo "$DF" >> "$LAB_CONFIG"
+# grep -qF -- "$KRNL" "$LAB_CONFIG" || echo "$KRNL" >> "$LAB_CONFIG"
+
+# $lab_con=$(pwd)/.jupyter/jupyter_lab_config.py
+# grep -qxF "c.InteractiveShellApp.extensions = ['df_jupyter_magic']" $lab_con ||\
+#   echo "c.InteractiveShellApp.extensions = ['df_jupyter_magic']" >> $lab_con
+
+# grep -qxF "c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']" $lab_con ||\
+#   echo "c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']" >> $lab_con
+
+############################### PREV CODE DOWN ######################################
+
+# if [ ! -f "$HOME/.jupyter/jupyter_lab_config.py" ]; then
+cat <<EOT > "$HOME"/.jupyter/jupyter_lab_config.py
 c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']
 EOT
-fi
+# fi
+
+
+# if [ ! -f "$HOME/.ipython/profile_default/ipython_config.py" ]; then
+# cat <<EOT > "$HOME"/.ipython/profile_default/ipython_config.py
+# c.InteractiveShellApp.extensions = ['df_jupyter_magic']
+# EOT
+# fi
