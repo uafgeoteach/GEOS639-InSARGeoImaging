@@ -1,6 +1,7 @@
 ARIA-tools
 ARIA-tools-docs
 log
+work
 .bash_history
 .bash_profile
 .bashrc
@@ -18,7 +19,10 @@ log
 .vscode
 
 # ######### Notebook specific items #######
-
+# Week 2
+# placeholder
+# Week 8
+Week-08/data_LA
 # Week 9
 Week-09/lab_6_data
 # Week 11

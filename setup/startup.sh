@@ -125,12 +125,12 @@ python -m pip install df-jupyter-magic
 
 ############################### PREV CODE DOWN ######################################
 
-# if [ ! -f "$HOME/.jupyter/jupyter_lab_config.py" ]; then
+if [ ! -f "$HOME/.jupyter/jupyter_lab_config.py" ]; then
 cat <<EOT > "$HOME"/.jupyter/jupyter_lab_config.py
 c.InteractiveShellApp.extensions = ['df_jupyter_magic']
 c.NotebookApp.kernel_manager_class = ['notebook.services.kernels.kernelmanager.AsyncMappingKernelManager']
 EOT
-# fi
+fi
 
 
 # if [ ! -f "$HOME/.ipython/profile_default/ipython_config.py" ]; then
