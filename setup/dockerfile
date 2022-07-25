@@ -1,11 +1,3 @@
-# FROM jupyter/base-notebook:hub-1.4.2 as release
-
-# originally working from this:
-# FROM jupyter/base-notebook@sha256:8635b39569cddecf2fac3d95ffe7777d007153e46d47a5dc873357d7cb2d5478
-
-# FROM jupyter/base-notebook@sha256:bc9ad73498f21ae716ba0e58d660063eae1677f6dd2bd5b669248fd0bf22dc79
-
-# FROM jupyter/base-notebook:latest
 FROM jupyter/base-notebook:python-3.9.2 as release
 
 LABEL organization="Alaska Satellite Facility"
@@ -58,7 +50,6 @@ RUN apt-get update && \
 RUN pip install --upgrade nbconvert
 
 # Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
-# RUN pip install tornado==5.1.1  # 4.5.3
 RUN pip install tornado==5.1.1 \
     url-widget \
     awscli
@@ -67,13 +58,9 @@ RUN pip install tornado==5.1.1 \
 RUN conda install conda=4.13.0 && \
     conda update -n base mamba
 
-# RUN pip install 'awscli==1.19.60' 'boto3==1.17.60' 'pyyaml==5.4.1' 'bokeh==2.3.1'
-
 # Install any other custom and jupyter libaries like widgets
 # Use pip (conda version) since we want to corner off GIAnT's work and also run it with Jupyter
 RUN mamba install -c conda-forge -y \
-    # jupyter_contrib_nbextensions=0.5.1 \
-#     jupyter_contrib_nbextensions \
     jupyter-resource-usage \
     nb_conda_kernels \
     jupyterlab \ 
@@ -84,14 +71,9 @@ RUN mamba install -c conda-forge -y \
 ENV GEO_FILE /etc/unavco
 RUN mkdir $GEO_FILE && \
     chown -R jovyan:users /etc/unavco/
-    # chmod -R 777 /etc/unavco/
-
-# # Make sure that any files in the home directory are jovyan permission
-# RUN chown -R jovyan:users $HOME/
 
 # Make sure mamba (within conda) has write access
 RUN chown -R jovyan:users /opt/conda/
-# RUN chmod -R 755 /opt/conda/
 
 # # Add sudo group user 599 elevation
 RUN addgroup -gid 599 elevation \
@@ -103,11 +85,9 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     conda clean --yes --all && \
     chown -R jovyan:users /opt/conda/pkgs
-    # chmod -R 777 /opt/conda/pkgs
 
 RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
 
-# WORKDIR /home/jovyan
 RUN conda init
 
 COPY setup/startup.sh ${GEO_FILE}/startup.sh
@@ -117,11 +97,7 @@ RUN chown -R jovyan:users $HOME
 USER jovyan
 
 EXPOSE 8888
-# WORKDIR /home/jovyan
 USER jovyan
 
-# --generate-config will generate .jupyter/jupyter_notebook_config.py
 ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser \
     --allow-root  
-    # --generate-config
-# ENTRYPOINT jupyter lab --no-browser --allow-root
