@@ -1,0 +1,32 @@
+ARIA-tools
+ARIA-tools-docs
+log
+work
+.bash_history
+.bash_profile
+.bashrc
+.cache
+.conda
+.condarc
+.config
+.ipynb_checkpoints
+.ipython
+.jupyter
+.local/**
+.local/envs/*
+!.local/envs/unavco.yml
+.viminfo
+.vscode
+
+# ######### Notebook specific items #######
+# Week 2
+# placeholder
+# Week 8
+Week-08/data_LA
+# Week 9
+Week-09/lab_6_data
+# Week 11
+Week-11/pycorr_iceflow
+Week-11/*.tif
+Week-11/*.nc
+Week-11/lab_6_data

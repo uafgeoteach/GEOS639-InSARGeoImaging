@@ -1,0 +1,6 @@
+**
+!dockerfile
+!unavco/etc/**
+!unavco/envs/**
+!etc/**
+!setup/**

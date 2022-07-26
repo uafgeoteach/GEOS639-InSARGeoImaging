@@ -1,0 +1,103 @@
+FROM jupyter/base-notebook:python-3.9.2 as release
+
+LABEL organization="Alaska Satellite Facility"
+LABEL author="Alex Lewandowski, Rui Kawahara, & Eric Lundell"
+LABEL creation_date="2022-06-13"
+
+# Base Stage ****************************************************************
+USER root
+WORKDIR /home/jovyan
+
+RUN set -ve
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+        software-properties-common \
+        git && \
+    add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable && \
+    apt-get update && \
+    apt-get upgrade -y
+
+
+# Install general items. If a library is needed for a specific piece of software, put it with that software.
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+        zip \
+        unzip \
+        wget \
+        vim \
+        rsync \
+        less \
+        snaphu \
+        curl \
+        openssh-client \
+        libgl1-mesa-glx \
+        emacs \
+        gnupg2 \
+        jq \
+        gfortran \
+        proj-bin \
+        geotiff-bin \
+        libshp-dev \
+        libshp2 \
+        libhdf5-dev \
+        libnetcdf-dev \
+        libgdal-dev \
+        libgsl-dev
+
+# Manually update nbconvert. A dicrepancy in the versioning causes a 500 when opening a notebook. https://github.com/jupyter/notebook/issues/3629#issuecomment-399408222
+# Remember, here pip is updating within the condas namespace where jupyter notebook items are held.
+RUN pip install --upgrade nbconvert
+
+# Downgrade tornado otherwise the notebook can't connect to the notebook server. https://github.com/jupyter/notebook/issues/2664#issuecomment-468954423
+RUN pip install tornado==5.1.1 \
+    url-widget \
+    awscli
+
+# Install conda and mamba
+RUN conda install conda=4.13.0 && \
+    conda update -n base mamba
+
+# Install any other custom and jupyter libaries like widgets
+# Use pip (conda version) since we want to corner off GIAnT's work and also run it with Jupyter
+RUN mamba install -c conda-forge -y \
+    jupyter-resource-usage \
+    nb_conda_kernels \
+    jupyterlab \ 
+    ipympl \
+    mamba_gator
+
+# env - unavco
+ENV GEO_FILE /etc/unavco
+RUN mkdir $GEO_FILE && \
+    chown -R jovyan:users /etc/unavco/
+
+# Make sure mamba (within conda) has write access
+RUN chown -R jovyan:users /opt/conda/
+
+# # Add sudo group user 599 elevation
+RUN addgroup -gid 599 elevation \
+    && echo '%elevation ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Clean up a few other things at the end
+RUN apt-get update && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get autoremove -y && \
+    conda clean --yes --all && \
+    chown -R jovyan:users /opt/conda/pkgs
+
+RUN rm -rf /home/jovyan/..?* /home/jovyan/.[!.]* /home/jovyan/*
+
+RUN conda init
+
+COPY setup/startup.sh ${GEO_FILE}/startup.sh
+COPY setup/unavco.sh ${GEO_FILE}/unavco.sh
+
+RUN chown -R jovyan:users $HOME
+USER jovyan
+
+EXPOSE 8888
+USER jovyan
+
+ENTRYPOINT bash ${GEO_FILE}/startup.sh; jupyter lab --no-browser \
+    --allow-root  
