@@ -1,0 +1,1 @@
+This lab is an image analysis lab that does not require sophisticated computing environments. Please see the instructions in the lab PDF for more information.
