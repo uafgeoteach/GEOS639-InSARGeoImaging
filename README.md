@@ -1,5 +1,8 @@
 # GEOS639-InSARGeoImaging
 
+## Update March 2024 - The content for the 2024 run of this course is now available on the repo.
+
+
 ## Update: July 25th, 2022 - Dockerfile is set up so that users can run this repo on their environment.
 
 --- 
