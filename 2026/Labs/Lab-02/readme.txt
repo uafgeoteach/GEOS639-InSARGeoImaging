@@ -1,0 +1,1 @@
+This lab uses the freely-available processing toolbox SNAP, published and distributed by the European Space Agency. The lab instructions show you how to access, download, and install this toolbox.
